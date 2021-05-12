@@ -1,3 +1,5 @@
+
+
 import 'package:memory_game/model/tile_model.dart';
 
 String selectedTile = "";
@@ -17,7 +19,7 @@ List<bool> getClicked(){
   List<bool> yoClicked = new List<bool>();
   List<TileModel> myairs = new List<TileModel>();
   myairs = getPairs();
-  for(int i=0;i<myairs.length;i++){
+  for(int i=0;  i<myairs.length; i++){
     yoClicked[i] = false;
   }
   return yoClicked;
@@ -94,55 +96,55 @@ List<TileModel>  getQuestionPairs(){
   TileModel tileModel = new TileModel();
 
   //1
-  tileModel.setImageAssetPath("assets/questions.jpeg");
+  tileModel.setImageAssetPath("assets/download.jpeg");
   tileModel.setIsSelected(false);
   pairs.add(tileModel);
   pairs.add(tileModel);
   tileModel = new TileModel();
 
   //2
-  tileModel.setImageAssetPath("assets/questions.jpeg");
+  tileModel.setImageAssetPath("assets/download.jpeg");
   tileModel.setIsSelected(false);
   pairs.add(tileModel);
   pairs.add(tileModel);
   tileModel = new TileModel();
 
   //3
-  tileModel.setImageAssetPath("assets/questions.jpeg");
+  tileModel.setImageAssetPath("assets/download.jpeg");
   tileModel.setIsSelected(false);
   pairs.add(tileModel);
   pairs.add(tileModel);
   tileModel = new TileModel();
 
   //4
-  tileModel.setImageAssetPath("assets/questions.jpeg");
+  tileModel.setImageAssetPath("assets/download.jpeg");
   tileModel.setIsSelected(false);
   pairs.add(tileModel);
   pairs.add(tileModel);
   tileModel = new TileModel();
   //5
-  tileModel.setImageAssetPath("assets/questions.jpeg");
+  tileModel.setImageAssetPath("assets/download.jpeg");
   tileModel.setIsSelected(false);
   pairs.add(tileModel);
   pairs.add(tileModel);
   tileModel = new TileModel();
 
   //6
-  tileModel.setImageAssetPath("assets/questions.jpeg");
+  tileModel.setImageAssetPath("assets/download.jpeg");
   tileModel.setIsSelected(false);
   pairs.add(tileModel);
   pairs.add(tileModel);
   tileModel = new TileModel();
 
   //7
-  tileModel.setImageAssetPath("assets/questions.jpeg");
+  tileModel.setImageAssetPath("assets/download.jpeg");
   tileModel.setIsSelected(false);
   pairs.add(tileModel);
   pairs.add(tileModel);
   tileModel = new TileModel();
 
   //8
-  tileModel.setImageAssetPath("assets/questions.jpeg");
+  tileModel.setImageAssetPath("assets/download.jpeg");
   tileModel.setIsSelected(false);
   pairs.add(tileModel);
   pairs.add(tileModel);

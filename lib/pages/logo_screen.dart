@@ -28,7 +28,7 @@ class _LogoScreenState extends State<LogoScreen> {
                height: 50,
                 width: MediaQuery.of(context).size.width - 30 ,
                child: Center(
-                 child: Text("Start Game",style: TextStyle(
+                 child: Text("Let's Play",style: TextStyle(
                    fontSize: 30
                  ),),
                ),
