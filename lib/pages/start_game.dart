@@ -204,6 +204,7 @@
 
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:memory_game/data/data.dart';
 class StartGame extends StatefulWidget {
   @override
@@ -232,8 +233,8 @@ class _StartGameState extends State<StartGame> {
     return Scaffold(
         body: Stack(
           children: [
-            //Lottie.asset("assets/46367-space-rocket.json",
-            //height: MediaQuery.of(context).size.height),
+            Lottie.asset("assets/61518-confetti.json",
+            height: MediaQuery.of(context).size.height),
             Container(
               padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
               child: Column(
@@ -255,8 +256,8 @@ class _StartGameState extends State<StartGame> {
                   points != 800
                       ? GridView(
                       shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          mainAxisSpacing: 0.0, maxCrossAxisExtent: 100),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisSpacing: 0.0, crossAxisCount: 4, mainAxisExtent: 100),
                       children: List.generate(visiblePairs.length, (index) {
                         cardKeys.putIfAbsent(
                             index, () => GlobalKey<FlipCardState>());
@@ -280,7 +281,7 @@ class _StartGameState extends State<StartGame> {
                           padding: EdgeInsets.symmetric(
                               vertical: 23, horizontal: 30),
                           decoration: BoxDecoration(
-                              color: Colors.teal,
+                              color: Colors.lightBlueAccent,
                               borderRadius: BorderRadius.circular(2.0)),
                           child: Text("Replay")),
                     ),
@@ -305,160 +306,8 @@ class _TileState extends State<Tile> {
   Widget build(BuildContext context) {
     return Center(
         child: GestureDetector(
-          // onTap: () {
-          //   if (!selected) {
-          //     setState(() {
-          //       myPairs[widget.tileIndex].setIsSelected(true);
-          //     });
-          //     widget.parent.cardKeys[widget.tileIndex].currentState.toggleCard();
-          //     if (selectedTile != "") {
-          //       /// testing if the selected tiles are same
-          //       if (selectedTile ==
-          //           myPairs[widget.tileIndex].getImageAssetPath()) {
-          //         print("add point");
-          //
-          //         //print(selectedTile + " thishis" + widget.imagePathUrl);
-          //
-          //          TileModel tileModel = new TileModel();
-          //         // print(widget.tileIndex);
-          //         selected = true;
-          //         Future.delayed(const Duration(seconds: 2), () {
-          //           points = points + 100;
-          //           setState(() {
-          //
-          //           });
-          //           selected = false;
-          //           tileModel.setImageAssetPath("");
-          //           myPairs[widget.tileIndex] = tileModel;
-          //           print(selectedIndex);
-          //           myPairs[selectedIndex] = tileModel;
-          //           this.widget.parent.setState(() {});
-          //           setState(() {
-          //             selected = false;
-          //           });
-          //           //selectedTile = "";
-          //         });
-          //         widget.parent.cardKeys[widget.tileIndex].currentState
-          //             .toggleCard();
-          //         widget.parent.lastFlipped.currentState.toggleCard();
-          //         selectedImageAssetPath = "";
-          //       } else {
-          //         print(selectedTile +
-          //             " thishis " +
-          //             myPairs[widget.tileIndex].getImageAssetPath());
-          //         print("wrong choice");
-          //         print(widget.tileIndex);
-          //         print(selectedIndex);
-          //         selected = true;
-          //         Future.delayed(const Duration(seconds: 2), () {
-          //           this.widget.parent.setState(() {
-          //             myPairs[widget.tileIndex].setIsSelected(false);
-          //             myPairs[selectedIndex].setIsSelected(false);
-          //           });
-          //           setState(() {
-          //             selected = false;
-          //             widget.parent.cardKeys[widget.tileIndex].currentState
-          //                 .toggleCard();
-          //             widget.parent.lastFlipped.currentState.toggleCard();
-          //           });
-          //         });
-          //         selectedTile = "";
-          //       }
-          //     } else {
-          //       widget.parent.lastFlipped =
-          //       widget.parent.cardKeys[widget.tileIndex];
-          //       setState(() {
-          //         selectedTile = myPairs[widget.tileIndex].getImageAssetPath();
-          //         selectedIndex = widget.tileIndex;
-          //         myPairs[widget.tileIndex].setIsSelected(true);
-          //       });
-          //
-          //       print(selectedTile);
-          //       print(selectedIndex);
-          //     }
-          //   }
-          // },
-          ///1 not flip
-          // onTap: () {
-          //   if (!selected) {
-          //     setState(() {
-          //       myPairs[widget.tileIndex].setIsSelected(true);
-          //     });
-          //     widget.parent.cardKeys[widget.tileIndex].currentState.toggleCard();
-          //     if (selectedTile != "") {
-          //       /// testing if the selected tiles are same
-          //       if (selectedTile ==
-          //           myPairs[widget.tileIndex].getImageAssetPath()) {
-          //         print("add point");
-          //         points = points + 100;
-          //         //print(selectedTile + " thishis" + widget.imagePathUrl);
-          //
-          //         TileModel tileModel = new TileModel();
-          //         print(widget.tileIndex);
-          //         selected = true;
-          //         Future.delayed(const Duration(seconds: 2), () {
-          //           tileModel.setImageAssetPath("");
-          //           myPairs[widget.tileIndex] = tileModel;
-          //           print(selectedIndex);
-          //           myPairs[selectedIndex] = tileModel;
-          //           this.widget.parent.setState(() {});
-          //           setState(() {
-          //             selected = false;
-          //           });
-          //           selectedTile = "";
-          //         });
-          //         widget.parent.cardKeys[widget.tileIndex].currentState
-          //             .toggleCard();
-          //         widget.parent.lastFlipped.currentState.toggleCard();
-          //         selectedImageAssetPath = "";
-          //       } else {
-          //         print(selectedTile +
-          //             " thishis " +
-          //             myPairs[widget.tileIndex].getImageAssetPath());
-          //         print("wrong choice");
-          //         print(widget.tileIndex);
-          //         print(selectedIndex);
-          //         selected = true;
-          //         Future.delayed(const Duration(seconds: 2), () {
-          //           this.widget.parent.setState(() {
-          //             myPairs[widget.tileIndex].setIsSelected(false);
-          //             myPairs[selectedIndex].setIsSelected(false);
-          //           });
-          //           setState(() {
-          //             selected = false;
-          //             widget.parent.cardKeys[widget.tileIndex].currentState
-          //                 .toggleCard();
-          //             widget.parent.lastFlipped.currentState.toggleCard();
-          //           });
-          //         });
-          //         selectedTile = "";
-          //       }
-          //     } else {
-          //       widget.parent.lastFlipped =
-          //              widget.parent.cardKeys[widget.tileIndex];
-          //       setState(() {
-          //         selectedTile = myPairs[widget.tileIndex].getImageAssetPath();
-          //         selectedIndex = widget.tileIndex;
-          //         myPairs[widget.tileIndex].setIsSelected(true);
-          //       });
-          //
-          //       print(selectedTile);
-          //       print(selectedIndex);
-          //     }
-          //   }
-          // },
-
-
           ///Issue
           onTap: () {
-            // _buildFlipAnimation();
-            // AlignmentDirectional.centerEnd.start;
-            //  controller.repeat();
-            //  selected = false;
-            //    Future.delayed(const Duration(seconds: 1), () {
-            //   //selected = true;
-            //   controller.stop();
-            // });
             if (!selected) {
               setState(() {
                 myPairs[widget.tileIndex].setIsSelected(true);
@@ -525,7 +374,7 @@ class _TileState extends State<Tile> {
             child: FlipCard(
               flipOnTouch: false,
               key: widget.parent.cardKeys[widget.tileIndex],
-              direction: FlipDirection.VERTICAL,
+              direction: FlipDirection.HORIZONTAL,
               front: myPairs[widget.tileIndex].getImageAssetPath() != ""
                   ? Image.asset(myPairs[widget.tileIndex].getIsSelected()
                   ? myPairs[widget.tileIndex].getImageAssetPath()
