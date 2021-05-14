@@ -201,18 +201,20 @@
 // // }
 //
 
-
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:memory_game/data/data.dart';
+
 class StartGame extends StatefulWidget {
   @override
   _StartGameState createState() => _StartGameState();
 }
+
 class _StartGameState extends State<StartGame> {
   GlobalKey<FlipCardState> lastFlipped;
   var cardKeys = Map<int, GlobalKey<FlipCardState>>();
+
   @override
   void initState() {
     super.initState();
@@ -221,173 +223,185 @@ class _StartGameState extends State<StartGame> {
     visiblePairs = myPairs;
     // selected = true;
     ///Start cards
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 5), () {
       setState(() {
         visiblePairs = getQuestionPairs();
         selected = false;
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
-          children: [
-            Lottie.asset("assets/61518-confetti.json",
-            height: MediaQuery.of(context).size.height),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  points != 800
-                      ? Column(
-                    children: [
-                      Text("$points/800"),
-                      Text("Points"),
-                    ],
-                  )
-                      : Container(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  points != 800
-                      ? GridView(
+      children: [
+        // Lottie.asset("assets/61518-confetti.json",
+        // height: MediaQuery.of(context).size.height),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              points != 800
+                  ? Column(
+                      children: [
+                        Text("$points/800"),
+                        Text("Points"),
+                      ],
+                    )
+                  : Container(),
+              SizedBox(
+                height: 20,
+              ),
+              points != 800
+                  //selectedImageAssetPath != 0
+                  //visiblePairs  != Image.asset("assets/right_image.jpeg")
+                  ? GridView(
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisSpacing: 0.0, crossAxisCount: 4, mainAxisExtent: 100),
+                          mainAxisSpacing: 0.0,
+                          crossAxisCount: 4,
+                          mainAxisExtent: 100),
                       children: List.generate(visiblePairs.length, (index) {
                         cardKeys.putIfAbsent(
                             index, () => GlobalKey<FlipCardState>());
                         GlobalKey<FlipCardState> thisCard = cardKeys[index];
                         return Tile(
                             imageAssetPath:
-                            visiblePairs[index].getImageAssetPath(),
+                                visiblePairs[index].getImageAssetPath(),
                             parent: this,
                             tileIndex: index);
                       }))
-                      : Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          points = 0;
-                        });
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => StartGame()));
-                      },
-                      child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 23, horizontal: 30),
-                          decoration: BoxDecoration(
-                              color: Colors.lightBlueAccent,
-                              borderRadius: BorderRadius.circular(2.0)),
-                          child: Text("Replay")),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
+                  : Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            points = 0;
+                          });
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => StartGame()));
+                        },
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 23, horizontal: 30),
+                            decoration: BoxDecoration(
+                                color: Colors.lightBlueAccent,
+                                borderRadius: BorderRadius.circular(2.0)),
+                            child: Text("Replay")),
+                      ),
+                    )
+            ],
+          ),
+        )
+      ],
+    ));
   }
 }
+
 class Tile extends StatefulWidget {
   String imageAssetPath;
   int tileIndex;
   _StartGameState parent;
+
   Tile({this.imageAssetPath, this.parent, this.tileIndex});
+
   @override
   _TileState createState() => _TileState();
 }
+
 class _TileState extends State<Tile> {
   @override
   Widget build(BuildContext context) {
     return Center(
         child: GestureDetector(
-          ///Issue
-          onTap: () {
-            if (!selected) {
-              setState(() {
-                myPairs[widget.tileIndex].setIsSelected(true);
+      ///Issue
+      onTap: () {
+        if (!selected) {
+          setState(() {
+            myPairs[widget.tileIndex].setIsSelected(true);
+          });
+          widget.parent.cardKeys[widget.tileIndex].currentState.toggleCard();
+          if (selectedImageAssetPath != "") {
+            if (selectedImageAssetPath ==
+                myPairs[widget.tileIndex].getImageAssetPath()) {
+              print("Correct");
+              selected = true;
+              Future.delayed(const Duration(seconds: 1), () {
+                points = points + 100;
+                setState(() {});
+                selected = false;
+                widget.parent.setState(() {
+                  myPairs[widget.tileIndex].setImageAssetPath("");
+                  myPairs[selectedTileIndex].setImageAssetPath("");
+                });
+                widget.parent.cardKeys[widget.tileIndex].currentState
+                    .toggleCard();
+                widget.parent.lastFlipped.currentState.toggleCard();
+                selectedImageAssetPath = "";
+                // for (int selectedImageAssetPath = 0;
+                //     selectedImageAssetPath <= 8;
+                //     selectedImageAssetPath++) {
+                //   print("+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+" +
+                //       selectedImageAssetPath.toString());
+                // }
               });
-              widget.parent.cardKeys[widget.tileIndex].currentState.toggleCard();
-              if (selectedImageAssetPath != "") {
-                if (selectedImageAssetPath ==
-                    myPairs[widget.tileIndex].getImageAssetPath()) {
-                  print("Correct");
-                  selected = true;
-                  Future.delayed(const Duration(seconds: 2), () {
-                    points = points + 100;
-                    setState(() {
-                    });
-                    selected = false;
-                    widget.parent.setState(() {
-                      myPairs[widget.tileIndex].setImageAssetPath("");
-                      myPairs[selectedTileIndex].setImageAssetPath("");
-                    });
-                    widget.parent.cardKeys[widget.tileIndex].currentState
-                        .toggleCard();
-                    widget.parent.lastFlipped.currentState.toggleCard();
-                    selectedImageAssetPath = "";
-                  });
-                } else {
-                  print("Wrong");
-                  selected = true;
-                  Future.delayed(const Duration(seconds: 2), () {
-                    widget.parent.setState(() {
-                      print("++++_+_+_+_+_+__+_+_+");
-                      myPairs[widget.tileIndex].setIsSelected(false);
-                      myPairs[selectedTileIndex].setIsSelected(false);
-                    });
-                    setState(() {
-                      selected = false;
-                    });
-                    widget.parent.cardKeys[widget.tileIndex].currentState
-                        .toggleCard();
-                    widget.parent.lastFlipped.currentState.toggleCard();
-                  });
-                  selectedImageAssetPath = "";
-                }
-              } else {
-                widget.parent.lastFlipped =
-                widget.parent.cardKeys[widget.tileIndex];
-                print("lastFlipped");
-                selectedTileIndex = widget.tileIndex;
-                selectedImageAssetPath =
-                    myPairs[widget.tileIndex].getImageAssetPath();
-              }
-              setState(() {
-                myPairs[widget.tileIndex].setIsSelected(true);
+            } else {
+              print("Wrong");
+              selected = true;
+              Future.delayed(const Duration(seconds: 1), () {
+                points = points - 50;
+                widget.parent.setState(() {
+                  print("=--=--=--=--=--=--=--=--=--=--=--=");
+                  myPairs[widget.tileIndex].setIsSelected(false);
+                  myPairs[selectedTileIndex].setIsSelected(false);
+                });
+                setState(() {
+                  selected = false;
+                });
+                widget.parent.cardKeys[widget.tileIndex].currentState
+                    .toggleCard();
+                widget.parent.lastFlipped.currentState.toggleCard();
               });
-              print("Click me");
+              selectedImageAssetPath = "";
             }
-          },
-          child: Container(
-            margin: EdgeInsets.all(5),
-            // child: myPairs[widget.tileIndex].getImageAssetPath() != ""
-            //           ? Image.asset(myPairs[widget.tileIndex].getIsSelected()
-            //           ? myPairs[widget.tileIndex].getImageAssetPath()
-            //           : widget.imageAssetPath)
-            //           : Image.asset("assets/right_image.jpeg"),
-            child: FlipCard(
-              flipOnTouch: false,
-              key: widget.parent.cardKeys[widget.tileIndex],
-              direction: FlipDirection.HORIZONTAL,
-              front: myPairs[widget.tileIndex].getImageAssetPath() != ""
-                  ? Image.asset(myPairs[widget.tileIndex].getIsSelected()
+          } else {
+            widget.parent.lastFlipped =
+                widget.parent.cardKeys[widget.tileIndex];
+            print("lastFlipped");
+            selectedTileIndex = widget.tileIndex;
+            selectedImageAssetPath =
+                myPairs[widget.tileIndex].getImageAssetPath();
+          }
+          setState(() {
+            myPairs[widget.tileIndex].setIsSelected(true);
+          });
+          print("Click me");
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.all(5),
+        // child: myPairs[widget.tileIndex].getImageAssetPath() != ""
+        //           ? Image.asset(myPairs[widget.tileIndex].getIsSelected()
+        //           ? myPairs[widget.tileIndex].getImageAssetPath()
+        //           : widget.imageAssetPath)
+        //           : Image.asset("assets/right_image.jpeg"),
+        child: FlipCard(
+          flipOnTouch: false,
+          key: widget.parent.cardKeys[widget.tileIndex],
+          direction: FlipDirection.HORIZONTAL,
+          front: myPairs[widget.tileIndex].getImageAssetPath() != ""
+              ? Image.asset(myPairs[widget.tileIndex].getIsSelected()
                   ? myPairs[widget.tileIndex].getImageAssetPath()
                   : widget.imageAssetPath)
-                  : Image.asset("assets/right_image.jpeg"),
-              back: Image.asset(myPairs[widget.tileIndex].getImageAssetPath() == ""
-                  ? "assets/right_image.jpeg"
-                  : myPairs[widget.tileIndex].getImageAssetPath()),
-            ),
-          ),
-        ));
+              : Image.asset("assets/right_image.jpeg"),
+          back: Image.asset(myPairs[widget.tileIndex].getImageAssetPath() == ""
+              ? "assets/right_image.jpeg"
+              : myPairs[widget.tileIndex].getImageAssetPath()),
+        ),
+      ),
+    ));
   }
 }
-
-
-
