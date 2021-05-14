@@ -360,7 +360,6 @@ class _TileState extends State<Tile> {
                 });
                 setState(() {
                   selected = false;
-
                 });
                 widget.parent.cardKeys[widget.tileIndex].currentState
                     .toggleCard();
