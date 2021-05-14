@@ -359,6 +359,7 @@ class _TileState extends State<Tile> {
                   myPairs[selectedTileIndex].setIsSelected(false);
                 });
                 setState(() {
+
                   selected = false;
                 });
                 widget.parent.cardKeys[widget.tileIndex].currentState
