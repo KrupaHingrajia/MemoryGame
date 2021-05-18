@@ -206,6 +206,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:memory_game/data/data.dart';
 
+var count = 0;
+
 class StartGame extends StatefulWidget {
   @override
   _StartGameState createState() => _StartGameState();
@@ -229,6 +231,9 @@ class _StartGameState extends State<StartGame> {
         selected = false;
       });
     });
+    if (count == 8) {
+      count = 0;
+    }
   }
 
   @override
@@ -256,9 +261,7 @@ class _StartGameState extends State<StartGame> {
               SizedBox(
                 height: 20,
               ),
-              points != 800
-                  //selectedImageAssetPath != 0
-                  //visiblePairs  != Image.asset("assets/right_image.jpeg")
+              count != 8
                   ? GridView(
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -270,8 +273,7 @@ class _StartGameState extends State<StartGame> {
                             index, () => GlobalKey<FlipCardState>());
                         GlobalKey<FlipCardState> thisCard = cardKeys[index];
                         return Tile(
-                            imageAssetPath:
-                                visiblePairs[index].getImageAssetPath(),
+                            imageAssetPath:visiblePairs[index].getImageAssetPath(),
                             parent: this,
                             tileIndex: index);
                       }))
@@ -317,7 +319,6 @@ class _TileState extends State<Tile> {
   Widget build(BuildContext context) {
     return Center(
         child: GestureDetector(
-      ///Issue
       onTap: () {
         if (!selected) {
           setState(() {
@@ -329,6 +330,10 @@ class _TileState extends State<Tile> {
                 myPairs[widget.tileIndex].getImageAssetPath()) {
               print("Correct");
               selected = true;
+              count = count + 1;
+              print("+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+" +
+                  count.toString());
+
               Future.delayed(const Duration(seconds: 1), () {
                 points = points + 100;
                 setState(() {});
@@ -341,12 +346,6 @@ class _TileState extends State<Tile> {
                     .toggleCard();
                 widget.parent.lastFlipped.currentState.toggleCard();
                 selectedImageAssetPath = "";
-                // for (int selectedImageAssetPath = 0;
-                //     selectedImageAssetPath <= 8;
-                //     selectedImageAssetPath++) {
-                //   print("+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+" +
-                //       selectedImageAssetPath.toString());
-                // }
               });
             } else {
               print("Wrong");
@@ -359,7 +358,6 @@ class _TileState extends State<Tile> {
                   myPairs[selectedTileIndex].setIsSelected(false);
                 });
                 setState(() {
-
                   selected = false;
                 });
                 widget.parent.cardKeys[widget.tileIndex].currentState
