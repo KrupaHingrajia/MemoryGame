@@ -244,11 +244,12 @@ class _StartGameState extends State<StartGame> {
         // Lottie.asset("assets/61518-confetti.json",
         // height: MediaQuery.of(context).size.height),
         Container(
+          //color: Colors.green,
           padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
           child: Column(
             children: [
               SizedBox(
-                height: 20,
+                height: 50,
               ),
               points != 800
                   ? Column(
@@ -286,13 +287,26 @@ class _StartGameState extends State<StartGame> {
                           Navigator.of(context).push(
                               MaterialPageRoute(builder: (_) => StartGame()));
                         },
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 23, horizontal: 30),
-                            decoration: BoxDecoration(
-                                color: Colors.lightBlueAccent,
-                                borderRadius: BorderRadius.circular(2.0)),
-                            child: Text("Replay")),
+                        child: Stack(
+                          children: [
+                            Lottie.asset("assets/winner.json",
+                           height: MediaQuery.of(context).size.height -220,
+                            ),
+
+                           Row(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               Container(
+                                   padding: EdgeInsets.symmetric(
+                                       vertical: 23, horizontal: 30),
+                                   decoration: BoxDecoration(
+                                       color: Colors.lightBlueAccent,
+                                       borderRadius: BorderRadius.circular(2.0)),
+                                   child: Text("Replay")),
+                             ],
+                           )
+                          ],
+                        ),
                       ),
                     )
             ],
@@ -320,6 +334,14 @@ class _TileState extends State<Tile> {
     return Center(
         child: GestureDetector(
       onTap: () {
+        print(myPairs[widget.tileIndex].getImageAssetPath());
+        if(myPairs[widget.tileIndex].getImageAssetPath().isEmpty){
+          print("jmmmmmm3@@@@@@@@@@@@@@@@@@@@");
+          setState(() {
+            selected = true;
+          });
+        }
+
         if (!selected) {
           setState(() {
             myPairs[widget.tileIndex].setIsSelected(true);
@@ -395,9 +417,9 @@ class _TileState extends State<Tile> {
               ? Image.asset(myPairs[widget.tileIndex].getIsSelected()
                   ? myPairs[widget.tileIndex].getImageAssetPath()
                   : widget.imageAssetPath)
-              : Image.asset("assets/right_image.jpeg"),
+              : Image.asset("assets/MWallMonster@2x.png"),
           back: Image.asset(myPairs[widget.tileIndex].getImageAssetPath() == ""
-              ? "assets/right_image.jpeg"
+              ? "assets/MWallMonster@2x.png"
               : myPairs[widget.tileIndex].getImageAssetPath()),
         ),
       ),
