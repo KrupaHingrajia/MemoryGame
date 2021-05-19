@@ -201,6 +201,8 @@
 // // }
 //
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -217,9 +219,20 @@ class _StartGameState extends State<StartGame> {
   GlobalKey<FlipCardState> lastFlipped;
   var cardKeys = Map<int, GlobalKey<FlipCardState>>();
 
+  AudioPlayer audioPlayer = AudioPlayer();
+  AudioPlayerState audioPlayerState = AudioPlayerState.PAUSED;
+  AudioCache audioCache;
+  String path = 'PlayBackground.mp3';
+
   @override
   void initState() {
     super.initState();
+    audioCache = AudioCache(fixedPlayer: audioPlayer);
+    audioPlayer.onPlayerStateChanged.listen((AudioPlayerState s) {
+      setState(() {
+        audioPlayerState = s;
+      });
+    });
     myPairs = getPairs();
     myPairs.shuffle();
     visiblePairs = myPairs;
@@ -237,7 +250,24 @@ class _StartGameState extends State<StartGame> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    audioPlayer.release();
+    audioPlayer.dispose();
+    audioCache.clearCache();
+  }
+
+  playMusic() async {
+    await audioCache.play(path);
+  }
+
+  pauseMusic() async {
+    await audioPlayer.pause();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    playMusic();
     return Scaffold(
         body: Stack(
       children: [
