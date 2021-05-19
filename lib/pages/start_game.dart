@@ -12,7 +12,7 @@ class StartGame extends StatefulWidget {
   _StartGameState createState() => _StartGameState();
 }
 
-class _StartGameState extends State<StartGame> {
+class _StartGameState extends State<StartGame> with WidgetsBindingObserver {
   GlobalKey<FlipCardState> lastFlipped;
   var cardKeys = Map<int, GlobalKey<FlipCardState>>();
 
@@ -35,7 +35,7 @@ class _StartGameState extends State<StartGame> {
     visiblePairs = myPairs;
     // selected = true;
     ///Start cards
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         visiblePairs = getQuestionPairs();
         selected = false;
@@ -45,14 +45,17 @@ class _StartGameState extends State<StartGame> {
       count = 0;
     }
     playMusic();
+    pauseMusic();
+    WidgetsBinding.instance?.addObserver(this);
   }
 
   @override
   void dispose() {
     super.dispose();
     audioPlayer.release();
-   audioPlayer.dispose();
-   audioCache.clearCache();
+    audioPlayer.dispose();
+    audioCache.clearCache();
+    WidgetsBinding.instance?.removeObserver(this);
   }
 
   playMusic() async {
@@ -65,14 +68,29 @@ class _StartGameState extends State<StartGame> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive) {
+      pauseMusic();
+    } else if (state == AppLifecycleState.resumed) {
+      playMusic();
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+    if(count == 8) {
+      pauseMusic();
+    }
     return Scaffold(
         body: Stack(
           children: [
             // Lottie.asset("assets/61518-confetti.json",
             // height: MediaQuery.of(context).size.height),
             Container(
-              //color: Colors.green,
+              color: Colors.pinkAccent.withOpacity(0.20),
+              //color: Colors.lightBlueAccent,
               padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
               child: Column(
                 children: [
@@ -86,7 +104,8 @@ class _StartGameState extends State<StartGame> {
                       Text("Points"),
                     ],
                   )
-                      : Container(),
+                      : Container(
+                  ),
                   SizedBox(
                     height: 20,
                   ),
@@ -201,12 +220,18 @@ class _TileState extends State<Tile> {
                 selected = true;
               });
             }
-
+            else{
+              setState(() {
+                selected = false;
+              });
+            }
             if (!selected) {
               setState(() {
                 myPairs[widget.tileIndex].setIsSelected(true);
               });
+              //widget.parent.cardKeys[widget.tileIndex].currentState.toggleCard();
               widget.parent.cardKeys[widget.tileIndex].currentState.toggleCard();
+
               if (selectedImageAssetPath != "") {
                 if (selectedImageAssetPath ==
                     myPairs[widget.tileIndex].getImageAssetPath()) {
