@@ -2,6 +2,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:memory_game/data/data.dart';
 
@@ -15,6 +16,7 @@ class StartGame extends StatefulWidget {
 class _StartGameState extends State<StartGame> with WidgetsBindingObserver {
   GlobalKey<FlipCardState> lastFlipped;
   var cardKeys = Map<int, GlobalKey<FlipCardState>>();
+  bool isSingleTouch = true;
 
   AudioPlayer audioPlayer = AudioPlayer();
   AudioPlayerState audioPlayerState = AudioPlayerState.PAUSED;
@@ -83,84 +85,84 @@ class _StartGameState extends State<StartGame> with WidgetsBindingObserver {
     if(count == 8) {
       pauseMusic();
     }
-    return Scaffold(
-        body: Stack(
-          children: [
-            // Lottie.asset("assets/61518-confetti.json",
-            // height: MediaQuery.of(context).size.height),
-            Container(
-              color: Colors.pinkAccent.withOpacity(0.20),
-              //color: Colors.lightBlueAccent,
-              padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 50,
-                  ),
-                  points != 800
-                      ? Column(
-                    children: [
-                      Text("$points/800"),
-                      Text("Points"),
-                    ],
-                  )
-                      : Container(
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  count != 8
-                      ? GridView(
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          mainAxisSpacing: 0.0,
-                          crossAxisCount: 4,
-                          mainAxisExtent: 100),
-                      children: List.generate(visiblePairs.length, (index) {
-                        cardKeys.putIfAbsent(
-                            index, () => GlobalKey<FlipCardState>());
-                        GlobalKey<FlipCardState> thisCard = cardKeys[index];
-                        return Tile(
-                            imageAssetPath:visiblePairs[index].getImageAssetPath(),
-                            parent: this,
-                            tileIndex: index);
-                      }))
-                      : Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          points = 0;
-                        });
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => StartGame()));
-                      },
-                      child: Stack(
-                        children: [
-                          Lottie.asset("assets/winner.json",
-                            height: MediaQuery.of(context).size.height -220,
-                          ),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 23, horizontal: 30),
-                                  decoration: BoxDecoration(
-                                      color: Colors.lightBlueAccent,
-                                      borderRadius: BorderRadius.circular(2.0)),
-                                  child: Text("Replay")),
-                            ],
-                          )
-                        ],
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+          body: Stack(
+            children: [
+              // Lottie.asset("assets/61518-confetti.json",
+              // height: MediaQuery.of(context).size.height),
+              Container(
+                color: Colors.pinkAccent.withOpacity(0.20),
+                //color: Colors.lightBlueAccent,
+                padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    count != 8
+                        ? GridView(
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            mainAxisSpacing: 0.0,
+                            crossAxisCount: 4,
+                            mainAxisExtent: 100),
+                        children: List.generate(visiblePairs.length, (index) {
+                          cardKeys.putIfAbsent(
+                              index, () => GlobalKey<FlipCardState>());
+                          GlobalKey<FlipCardState> thisCard = cardKeys[index];
+                          return Tile(
+                              imageAssetPath:visiblePairs[index].getImageAssetPath(),
+                              parent: this,
+                              tileIndex: index);
+                        }))
+                        : Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            points = 0;
+                          });
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => StartGame()));
+                        },
+                        child: Stack(
+                          children: [
+                            Lottie.asset("assets/winner.json",
+                              height: MediaQuery.of(context).size.height -220,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 18, horizontal: 35),
+                                         decoration: BoxDecoration(
+                                        color: Colors.blueGrey,
+                                        borderRadius: BorderRadius.circular(10.0)),
+                                    child: Text("Replay",style: TextStyle(fontSize: 20),)),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
+                    SizedBox(
+                      height: 60,
+                    ),
+                    points != 800
+                        ? Column(
+                      children: [
+                        Text("$points/800",style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                        Text("Points",style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                      ],
+                    )
+                        : Container(
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )),
+    );
   }
 }
 
@@ -214,24 +216,17 @@ class _TileState extends State<Tile> {
           onTap: () {
             playMusic();
             print(myPairs[widget.tileIndex].getImageAssetPath());
-            if(myPairs[widget.tileIndex].getImageAssetPath().isEmpty){
-              print("jmmmmmm3@@@@@@@@@@@@@@@@@@@@");
-              setState(() {
-                selected = true;
-              });
-            }
-            else{
-              setState(() {
-                selected = false;
-              });
+            if(myPairs[widget.tileIndex].getImageAssetPath().isEmpty) {
+              print("@@@@@@@@@@@********************@@@@@@@@@");
+              Dismissible(
+                onDismissed: null,
+              );
             }
             if (!selected) {
               setState(() {
                 myPairs[widget.tileIndex].setIsSelected(true);
               });
-              //widget.parent.cardKeys[widget.tileIndex].currentState.toggleCard();
               widget.parent.cardKeys[widget.tileIndex].currentState.toggleCard();
-
               if (selectedImageAssetPath != "") {
                 if (selectedImageAssetPath ==
                     myPairs[widget.tileIndex].getImageAssetPath()) {
@@ -282,7 +277,7 @@ class _TileState extends State<Tile> {
                     myPairs[widget.tileIndex].getImageAssetPath();
               }
               setState(() {
-                myPairs[widget.tileIndex].setIsSelected(true);
+                myPairs[widget.tileIndex].setIsSelected(false);
               });
               print("Click me");
             }
