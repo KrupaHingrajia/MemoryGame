@@ -32,6 +32,7 @@ dependencies:
   flip_card: ^0.4.4
   audioplayers: 0.17.0
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
