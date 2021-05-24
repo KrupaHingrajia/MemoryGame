@@ -245,6 +245,10 @@ class _TileState extends State<Tile> {
 
           myPairs[widget.tileIndex].isTileOpened = true;
 
+          // Future.delayed(const Duration(seconds: 3), () {
+          //   myPairs[widget.tileIndex].isTileOpened = false;
+          // });
+
           print("Image®†††††††††††††††††††††††††®"+widget.imageAssetPath.toString());
           print("Index®†††††††††††††††††††††††††®"+widget.tileIndex.toString());
           playMusic();
@@ -258,7 +262,8 @@ class _TileState extends State<Tile> {
         if (!selected) {
           setState(() {
             myPairs[widget.tileIndex].setIsSelected(true);
-            print("***********Selected image**********${myPairs[widget.tileIndex].getIsSelected()} ");
+            print("***********Selected image**********${myPairs[widget.tileIndex]
+                    .getIsSelected()}");
           });
 
           widget.parent.cardKeys[widget.tileIndex].currentState.toggleCard();
@@ -284,6 +289,7 @@ class _TileState extends State<Tile> {
                 widget.parent.lastFlipped.currentState.toggleCard();
                 selectedImageAssetPath = "";
               });
+
             } else {
               print("Wrong");
               selected = true;
@@ -302,10 +308,12 @@ class _TileState extends State<Tile> {
                 widget.parent.lastFlipped.currentState.toggleCard();
               });
               selectedImageAssetPath = "";
+              myPairs[widget.tileIndex].isTileOpened = false;
+              myPairs[selectedTileIndex].isTileOpened = false;
             }
           } else {
             widget.parent.lastFlipped =
-                widget.parent.cardKeys[widget.tileIndex];
+            widget.parent.cardKeys[widget.tileIndex];
             print("lastFlipped");
             selectedTileIndex = widget.tileIndex;
             selectedImageAssetPath =
@@ -316,11 +324,6 @@ class _TileState extends State<Tile> {
           });
           print("Click me");
         }
-        // else (selected){
-        //   setState(() {
-        //     myPairs[widget.tileIndex].setIsSelected(false);
-        //   });
-        // };
       },
       child: Container(
         margin: EdgeInsets.all(5),
